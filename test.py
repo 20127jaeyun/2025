@@ -21,7 +21,6 @@ def get_recipes():
             "difficulty": "쉬움",
             "time": 25
         },
-        # ... 나머지 레시피 동일하게 추가, 이미지 제외 ...
         "두부조림": {
             "ingredients": ["두부", "간장", "고춧가루", "파", "마늘"],
             "instructions": "두부를 썰어 팬에 올리고 간장, 고춧가루, 파, 마늘 양념을 올려 졸인다.",
@@ -34,13 +33,13 @@ recipes = get_recipes()
 
 st.title("🥘 냉장고 속 재료로 레시피 추천하기")
 
-# 사용자 입력 (멀티 선택)
-all_ingredients = sorted({ing for r in recipes.values() for ing in r['ingredients']})
-user_ingredients = st.multiselect("냉장고 속 재료를 선택하세요", all_ingredients)
+# 사용자 입력 (직접 입력)
+ingredients_input = st.text_input("냉장고 속 재료를 입력하세요 (쉼표로 구분)")
+user_ingredients = [i.strip() for i in ingredients_input.split(',') if i.strip()]
 
 if st.button("레시피 추천받기"):
     if not user_ingredients:
-        st.warning("❌ 재료를 선택해주세요.")
+        st.warning("❌ 재료를 입력해주세요.")
     else:
         # 레시피 추천 로직: 재료 일치 비율로 점수 계산
         scored_recipes = []
