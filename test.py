@@ -31,7 +31,7 @@ recipes = get_recipes()
 st.title("🥘 냉장고 속 재료로 레시피 추천하기")
 
 # 사용자 입력
-ingredients = st.text_input("냉장고 속 재료를 입력하세요 (쉼표로 구분)", "김치, 밥, 계란")
+ingredients = st.text_input("냉장고 속 재료를 입력하세요 (쉼표로 구분)")  # 기본값 제거
 user_ingredients = [i.strip() for i in ingredients.split(',')]
 
 if st.button("레시피 추천받기"):
@@ -43,7 +43,7 @@ if st.button("레시피 추천받기"):
         
         # 입력한 재료 중 1개 이상 포함되면 추천
         match_count = len(set(user_ingredients) & set(req_ingredients))
-        if match_count >= 1:  # 하나만 있어도 추천
+        if match_count >= 1:
             st.success(f"✅ {recipe}")
             st.write(f"필요 재료: {', '.join(req_ingredients)}")
             st.write(f"조리법: {instructions}")
