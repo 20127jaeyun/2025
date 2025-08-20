@@ -1,6 +1,6 @@
 import streamlit as st
 
-# 레시피 데이터 (기존 + 신규 메뉴 포함)
+# 레시피 데이터 (기존 + 신규 메뉴 포함, 모두 생략 없이)
 recipes = [
     # 기존 레시피
     {
@@ -182,6 +182,7 @@ recipes = [
     }
 ]
 
+# Streamlit UI
 st.title("🥘 자취생 맞춤 레시피 추천기 (🔥 적합도 표시)")
 
 # 사용자 입력
@@ -200,21 +201,27 @@ if user_ingredients:
 
     for recipe in recipes:
         score = 0
-        has_main = False
+        main_match_count = 0
 
         # 메인 재료 확인
         for main in recipe["main_ingredients"]:
             if main in user_ingredients:
-                score += 2
-                has_main = True
+                main_match_count += 1
+
+        # 메인재료 1개만 있으면 적합도 1
+        if main_match_count == 1:
+            score += 1
+        elif main_match_count > 1:
+            score += 2 * main_match_count
 
         # 일반 재료 확인
         for ing in recipe["ingredients"]:
             if ing in user_ingredients:
                 score += 1
 
-        # 필터 적용
-        if score > 0 and has_main:
+        # 메인재료 없으면 추천 안함
+        if main_match_count >= 1:
+            # 필터 적용
             if recipe["time"] <= max_time:
                 if difficulty_filter == "전체" or recipe["difficulty"] == difficulty_filter:
                     scored_recipes.append((score, recipe))
@@ -224,13 +231,4 @@ if user_ingredients:
 
     if scored_recipes:
         st.subheader("추천 레시피")
-        for score, recipe in scored_recipes[:10]:
-            with st.expander(f"{recipe['name']} 🔥 적합도: {score}"):
-                st.write(f"⏱ 조리 시간: {recipe['time']}분")
-                st.write(f"📌 난이도: {recipe['difficulty']}")
-                st.write(f"🥕 필요한 재료: {', '.join(recipe['main_ingredients'] + recipe['ingredients'])}")
-                st.write(f"👩‍🍳 조리 방법:\n{recipe['steps']}")
-    else:
-        st.warning("조건에 맞는 레시피가 없습니다.")
-else:
-    st.info("재료를 입력하면 레시피를 추천해드려요!")
+        for
