@@ -1,98 +1,69 @@
 import streamlit as st
 
-# 레시피 데이터 (메인재료, 일반재료, 난이도, 시간)
+# 레시피 데이터
 recipes = [
-    {
-        "name": "김치볶음밥",
-        "main_ingredients": ["김치", "밥"],
-        "ingredients": ["양파", "대파", "계란", "간장"],
-        "steps": "김치와 밥을 볶고 간장으로 간을 한다.",
-        "difficulty": "쉬움",
-        "time": 15
-    },
-    {
-        "name": "된장찌개",
-        "main_ingredients": ["된장"],
-        "ingredients": ["두부", "애호박", "양파", "고추"],
-        "steps": "된장을 풀고 채소와 두부를 넣어 끓인다.",
-        "difficulty": "보통",
-        "time": 25
-    },
-    {
-        "name": "김밥",
-        "main_ingredients": ["김", "밥"],
-        "ingredients": ["계란", "시금치", "단무지", "햄"],
-        "steps": "밥을 김에 올리고 여러 재료를 넣어 말아준다.",
-        "difficulty": "보통",
-        "time": 40
-    },
-    {
-        "name": "토마토 파스타",
-        "main_ingredients": ["토마토", "파스타"],
-        "ingredients": ["올리브오일", "마늘", "양파", "치즈"],
-        "steps": "파스타를 삶고 토마토소스를 곁들인다.",
-        "difficulty": "보통",
-        "time": 30
-    },
-    {
-        "name": "두부조림",
-        "main_ingredients": ["두부"],
-        "ingredients": ["간장", "마늘", "파", "고춧가루"],
-        "steps": "두부를 구운 뒤 양념장을 넣어 졸인다.",
-        "difficulty": "쉬움",
-        "time": 20
-    }
+    {"name": "김치볶음밥", "ingredients": ["김치", "밥", "양파", "간장", "계란"], "main": ["김치"], "time": 15, "difficulty": "쉬움"},
+    {"name": "된장찌개", "ingredients": ["된장", "두부", "애호박", "양파", "버섯"], "main": ["된장"], "time": 25, "difficulty": "보통"},
+    {"name": "카레라이스", "ingredients": ["밥", "카레가루", "감자", "당근", "양파"], "main": ["카레가루", "밥"], "time": 30, "difficulty": "보통"},
+    {"name": "불고기", "ingredients": ["소고기", "간장", "설탕", "양파", "파"], "main": ["소고기"], "time": 35, "difficulty": "보통"},
+    {"name": "김밥", "ingredients": ["밥", "김", "계란", "시금치", "단무지"], "main": ["밥", "김"], "time": 40, "difficulty": "어려움"},
+    {"name": "토마토 파스타", "ingredients": ["파스타", "토마토", "양파", "마늘"], "main": ["파스타", "토마토"], "time": 30, "difficulty": "보통"},
+    {"name": "크림 파스타", "ingredients": ["파스타", "생크림", "양파", "베이컨"], "main": ["파스타"], "time": 30, "difficulty": "보통"},
+    {"name": "계란말이", "ingredients": ["계란", "파", "소금"], "main": ["계란"], "time": 10, "difficulty": "쉬움"},
+    {"name": "오므라이스", "ingredients": ["밥", "계란", "케첩", "양파"], "main": ["밥", "계란"], "time": 20, "difficulty": "보통"},
+    {"name": "두부조림", "ingredients": ["두부", "간장", "마늘", "파"], "main": ["두부"], "time": 20, "difficulty": "쉬움"},
+    {"name": "된장국", "ingredients": ["된장", "두부", "파", "애호박"], "main": ["된장"], "time": 20, "difficulty": "쉬움"},
+    {"name": "김치찌개", "ingredients": ["김치", "두부", "돼지고기", "파"], "main": ["김치"], "time": 35, "difficulty": "보통"},
+    {"name": "부침개 (김치전)", "ingredients": ["김치", "부침가루", "계란"], "main": ["김치"], "time": 25, "difficulty": "쉬움"},
+    {"name": "샐러드", "ingredients": ["양상추", "토마토", "오이", "드레싱"], "main": ["양상추"], "time": 10, "difficulty": "쉬움"},
+    {"name": "치킨", "ingredients": ["닭고기", "간장", "마늘", "양파"], "main": ["닭고기"], "time": 60, "difficulty": "어려움"},
+    {"name": "갈비찜", "ingredients": ["소갈비", "무", "간장", "마늘", "대파"], "main": ["소갈비"], "time": 90, "difficulty": "어려움"},
+    
+    # ✅ 자취생 레시피 추가
+    {"name": "참치마요덮밥", "ingredients": ["참치캔", "마요네즈", "밥", "간장"], "main": ["참치캔", "밥"], "time": 10, "difficulty": "쉬움"},
+    {"name": "떡볶이", "ingredients": ["떡", "고추장", "어묵", "파"], "main": ["떡", "고추장"], "time": 20, "difficulty": "보통"},
+    {"name": "감자볶음", "ingredients": ["감자", "간장", "기름", "소금"], "main": ["감자"], "time": 15, "difficulty": "쉬움"},
+    {"name": "스팸구이", "ingredients": ["스팸", "간장", "마늘"], "main": ["스팸"], "time": 10, "difficulty": "쉬움"},
+    {"name": "토스트", "ingredients": ["식빵", "계란", "버터", "치즈"], "main": ["식빵", "계란"], "time": 10, "difficulty": "쉬움"},
 ]
 
-st.title("🥘 레시피 추천 앱")
+# 제목
+st.title("🍳 자취생을 위한 레시피 추천")
+
+st.markdown("👉 냉장고에 있는 재료를 입력하면, 만들 수 있는 요리를 추천해드려요!")
 
 # 사용자 입력
-user_input = st.text_input("가지고 있는 재료를 입력하세요 (쉼표로 구분)")
+user_input = st.text_input("📝 재료를 입력하세요 (쉼표로 구분):", "")
 user_ingredients = [i.strip() for i in user_input.split(",") if i.strip()]
 
-# 필터
-col1, col2 = st.columns(2)
-with col1:
-    max_time = st.slider("최대 조리 시간 (분)", 5, 60, 60)
-with col2:
-    difficulty_filter = st.selectbox("난이도", ["전체", "쉬움", "보통", "어려움"])
-
+# 추천 로직
 if user_ingredients:
-    scored_recipes = []
-
+    results = []
     for recipe in recipes:
         score = 0
-        has_main = False
+        matched_main = [m for m in recipe["main"] if m in user_ingredients]
+        matched_ingredients = [i for i in recipe["ingredients"] if i in user_ingredients]
 
-        # 메인 재료 확인
-        for main in recipe["main_ingredients"]:
-            if main in user_ingredients:
-                score += 2
-                has_main = True
+        if matched_main:
+            score += 2 * len(matched_main)
+        score += len(matched_ingredients)
 
-        # 일반 재료 확인
-        for ing in recipe["ingredients"]:
-            if ing in user_ingredients:
-                score += 1
+        if score > 0 and matched_main:
+            results.append((recipe, score))
 
-        # 필터 적용
-        if score > 0 and has_main:
-            if recipe["time"] <= max_time:
-                if difficulty_filter == "전체" or recipe["difficulty"] == difficulty_filter:
-                    scored_recipes.append((score, recipe))
+    results.sort(key=lambda x: x[1], reverse=True)
 
-    # 점수순 정렬
-    scored_recipes.sort(key=lambda x: x[0], reverse=True)
-
-    if scored_recipes:
-        st.subheader("추천 레시피")
-        for score, recipe in scored_recipes[:5]:
-            with st.expander(f"{recipe['name']} (점수: {score})"):
-                st.write(f"⏱ 조리 시간: {recipe['time']}분")
-                st.write(f"📌 난이도: {recipe['difficulty']}")
-                st.write(f"🥕 필요한 재료: {', '.join(recipe['main_ingredients'] + recipe['ingredients'])}")
-                st.write(f"👩‍🍳 조리 방법: {recipe['steps']}")
+    if results:
+        st.subheader("🍴 추천 레시피")
+        for recipe, score in results:
+            with st.container():
+                st.markdown(f"### ✨ {recipe['name']}")
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown(f"**⏱ 조리 시간:** {recipe['time']}분")
+                    st.markdown(f"**📌 난이도:** {recipe['difficulty']}")
+                with col2:
+                    st.markdown(f"**🥕 필요 재료:** {', '.join(recipe['ingredients'])}")
+                st.markdown("---")
     else:
-        st.warning("조건에 맞는 레시피가 없습니다.")
-else:
-    st.info("재료를 입력하면 레시피를 추천해드려요!")
+        st.error("조건에 맞는 레시피가 없습니다.")
